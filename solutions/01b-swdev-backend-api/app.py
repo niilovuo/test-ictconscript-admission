@@ -1,5 +1,5 @@
 from flask import Flask, Response, jsonify, request
-import db.entries_repository as repo
+from db import entries_repository as repo
 
 app = Flask(__name__)
 
@@ -42,4 +42,4 @@ def get_entry(id: int):
         return jsonify(data), 200
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=8000)
