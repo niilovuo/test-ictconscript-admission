@@ -1,0 +1,144 @@
+openapi: 3.0.3
+info:
+  title: Entries API
+  version: 1.0.0
+  description: API for managing entries with optional latitude/longitude.
+
+servers:
+  - url: http://localhost:8000
+
+paths:
+  /health:
+    get:
+      summary: Health Check
+      description: Returns OK if the server is running.
+      responses:
+        "200":
+          description: Server is healthy.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: OK
+
+  /entries:
+    get:
+      summary: List all entries
+      description: Retrieves a list of all entries.
+      responses:
+        "200":
+          description: A list of entries.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Entry"
+
+    post:
+      summary: Create a new entry
+      description: Creates a new entry with a title, body, and optional coordinates.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewEntry"
+            example:
+              title: My First Entry
+              body: This is the content of the entry.
+              lat: 60.192059
+              lon: 24.945831
+      responses:
+        "200":
+          description: Entry created successfully.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Successfully inserted entry {...} with id 1 at 2025-07-23T10:00:00Z
+        "400":
+          description: Bad request, missing or invalid parameters.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Missing required parameter "title"
+
+  /entries/{id}:
+    get:
+      summary: Get a specific entry
+      description: Retrieves a single entry by its ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the entry to retrieve.
+      responses:
+        "200":
+          description: The requested entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Entry"
+        "404":
+          description: Entry not found.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Entry 1 not found
+
+components:
+  schemas:
+    Entry:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: My First Entry
+        body:
+          type: string
+          example: This is the content of the entry.
+        lat:
+          type: number
+          format: float
+          nullable: true
+          example: 60.192059
+        lon:
+          type: number
+          format: float
+          nullable: true
+          example: 24.945831
+        isoTime:
+          type: string
+          format: date-time
+          example: 2025-07-23T10:00:00Z
+
+    NewEntry:
+      type: object
+      required:
+        - title
+        - body
+      properties:
+        title:
+          type: string
+          example: My First Entry
+        body:
+          type: string
+          example: This is the content of the entry.
+        lat:
+          type: number
+          format: float
+          nullable: true
+          example: 60.192059
+        lon:
+          type: number
+          format: float
+          nullable: true
+          example: 24.945831
