@@ -5,7 +5,7 @@ info:
   description: API for managing entries with optional latitude/longitude.
 
 servers:
-  - url: http://localhost:8000
+  - url: https://test-ictconscript-admission-niilovuokila.onrender.com
 
 paths:
   /health:

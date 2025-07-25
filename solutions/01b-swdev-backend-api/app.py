@@ -32,7 +32,7 @@ def list_entries():
     data = repo.list()
     return jsonify(data), 200
 
-@app.route("/entries/<int:id>")
+@app.route("/entries/<int:id>", methods=["GET"])
 def get_entry(id: int):
     try:
         data = repo.get(id)
